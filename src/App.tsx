@@ -19,6 +19,7 @@ import {
   SpeakerList,
   SpeakerCreate,
   SpeakerEdit,
+  SpeakerShow,
 } from './ressources/';
 import { LoginPage } from './pages/Login';
 
@@ -59,6 +60,7 @@ export const App = () => (
       list={SpeakerList}
       create={SpeakerCreate}
       edit={SpeakerEdit}
+      show={SpeakerShow}
       options={{ label: 'Intervenants' }}
     />
   </Admin>

@@ -17,16 +17,27 @@ export default defineConfig(({ mode }) => ({
       '/api': {
         target: 'https://eventsync-core-platform.onrender.com',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ''),
+                rewrite: (path) => path.replace(/^\/api/, ''),
+                configure: (proxy, options) => {
+                    proxy.on('error', (err, req, res) => {
+                        console.log('proxy error', err);
+                    });
+                    proxy.on('proxyReq', (proxyReq, req, res) => {
+                        console.log('Sending Request to the Target:', req.method, req.url);
+                    });
+                    proxy.on('proxyRes', (proxyRes, req, res) => {
+                        console.log('Received Response from the Target:', proxyRes.statusCode, req.url);
+                    });
+                },
       },
     },
   },
-  base: mode === 'production' ? '/admin-event-sync/' : './',
-  build: {
-    sourcemap: mode === "development",
-  },
-  test: {
-    globals: true,
-    environment: 'jsdom'
-  }
+  base: './',
+    build: {
+        sourcemap: mode === "development",
+    },
+    test: {
+        globals: true,
+        environment: 'jsdom'
+    }
 }));

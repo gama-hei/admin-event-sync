@@ -1,5 +1,3 @@
-// src/resources/rooms/RoomCreate.tsx
-
 import {
   Create,
   SimpleForm,
