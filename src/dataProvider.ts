@@ -1,8 +1,5 @@
-import fakeRestDataProvider from "ra-data-fakerest";
-import data from "./data.json";
+import simpleRestProvider from 'ra-data-simple-rest';
 
-export const dataProvider = fakeRestDataProvider(
-  data,
-  process.env.NODE_ENV !== "test",
-  300,
-);
+const API_URL = '';
+
+export const dataProvider = simpleRestProvider(API_URL);
