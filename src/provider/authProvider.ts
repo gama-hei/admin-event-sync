@@ -1,65 +1,92 @@
 import { AuthProvider } from 'react-admin';
-import { API_BASE_URL } from './config';
+import { API_BASE_URL, TOKEN_EXPIRY } from './config';
 
 const authProvider: AuthProvider = {
-  
   login: async ({ username, password }) => {
     try {
+      const email = username?.trim();
+      const pwd = password?.trim();
+
+      if (!email || !pwd) {
+        throw new Error('Veuillez saisir votre email et votre mot de passe.');
+      }
+
       const response = await fetch(`${API_BASE_URL}/auth/organizer/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: username, password }),
+        body: JSON.stringify({ email, password: pwd }),
       });
 
       if (!response.ok) {
+        let errorMessage = 'Identifiants invalides.';
         try {
           const errorData = await response.json();
-          throw new Error(errorData.message || 'Identifiants ou mot de passe incorrects.');
-        } catch (jsonError) {
-          throw new Error(`Erreur serveur (${response.status}). Veuillez réessayer plus tard.`);
+          if (errorData.error) {
+            errorMessage = errorData.error;
+          } else if (errorData.message) {
+            errorMessage = errorData.message;
+          }
+        } catch (_) {
         }
+        throw new Error(errorMessage || `Erreur ${response.status} lors de la connexion.`);
       }
 
       const data = await response.json();
-      
-      if (data && data.token && data.organizer) {
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('organizer', JSON.stringify(data.organizer));
-        return Promise.resolve();
-      } else {
-        throw new Error("La réponse du serveur est incomplète.");
+
+      if (!data.token || !data.organizerId) {
+        throw new Error('La réponse du serveur est incomplète. Contactez l\'administrateur.');
       }
 
-    } catch (networkError: any) {
-      console.error("Erreur lors de la tentative de connexion :", networkError);
-      throw new Error(networkError.message || "Impossible de joindre le serveur.");
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('tokenTimestamp', Date.now().toString());
+      localStorage.setItem('organizer', JSON.stringify({
+        id: data.organizerId,
+        fullName: data.fullName || 'Organisateur',
+        email: data.email || '',
+      }));
+
+      return Promise.resolve();
+    } catch (error: any) {
+      console.error('[AuthProvider.login] Erreur :', error);
+      throw new Error(error.message || 'Impossible de se connecter au serveur. Vérifiez votre réseau.');
     }
   },
 
   logout: () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('tokenTimestamp');
     localStorage.removeItem('organizer');
     return Promise.resolve();
   },
 
-  checkError: ({ status }) => {
+  checkError: ({ status, data }) => {
     if (status === 401 || status === 403) {
       localStorage.removeItem('token');
+      localStorage.removeItem('tokenTimestamp');
       localStorage.removeItem('organizer');
-      return Promise.reject(new Error('Session expirée.'));
-    } else {
-      return Promise.resolve();
+      const message = (data && data.message) || 'Session expirée ou non autorisée. Veuillez vous reconnecter.';
+      return Promise.reject(new Error(message));
     }
+    return Promise.resolve();
   },
 
   checkAuth: () => {
     const token = localStorage.getItem('token');
-    
-    if (token) {
-      return Promise.resolve();
-    } else {
-      return Promise.reject(new Error('Aucun jeton de session trouvé. Veuillez vous connecter.'));
+    if (!token) {
+      return Promise.reject(new Error('Veuillez vous connecter pour accéder à cette page.'));
     }
+    const timestamp = localStorage.getItem('tokenTimestamp');
+    if (timestamp) {
+      const elapsed = Date.now() - parseInt(timestamp, 10);
+      if (elapsed > TOKEN_EXPIRY) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('tokenTimestamp');
+        localStorage.removeItem('organizer');
+        return Promise.reject(new Error('Votre session a expiré. Veuillez vous reconnecter.'));
+      }
+    }
+
+    return Promise.resolve();
   },
 
   getPermissions: () => {
@@ -67,26 +94,23 @@ const authProvider: AuthProvider = {
   },
 
   getIdentity: () => {
-    const organizerRawData = localStorage.getItem('organizer');
-    
-    if (!organizerRawData) {
-      return Promise.reject(new Error('Aucune donnée utilisateur trouvée.'));
+    const organizerRaw = localStorage.getItem('organizer');
+    if (!organizerRaw) {
+      return Promise.reject(new Error('Aucune information utilisateur trouvée.'));
     }
 
     try {
-      const organizer = JSON.parse(organizerRawData);
-      
-      if (organizer && organizer.id && organizer.fullName) {
-        return Promise.resolve({
-          id: organizer.id,
-          fullName: organizer.fullName,
-          email: organizer.email || '',
-        });
-      } else {
-        throw new Error("Les données de l'organisateur sont incomplètes.");
+      const organizer = JSON.parse(organizerRaw);
+      if (!organizer.id || !organizer.fullName) {
+        throw new Error('Données utilisateur incomplètes.');
       }
-    } catch (parseError) {
-      console.error("Erreur de lecture des données utilisateur stockées :", parseError);
+      return Promise.resolve({
+        id: organizer.id,
+        fullName: organizer.fullName,
+        email: organizer.email || '',
+      });
+    } catch (error) {
+      console.error('[AuthProvider.getIdentity] Erreur de parsing :', error);
       localStorage.removeItem('organizer');
       return Promise.reject(new Error('Données de session corrompues.'));
     }
