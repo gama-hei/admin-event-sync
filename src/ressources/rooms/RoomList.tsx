@@ -1,5 +1,3 @@
-// src/resources/rooms/RoomList.tsx
-
 import {
   List,
   Datagrid,

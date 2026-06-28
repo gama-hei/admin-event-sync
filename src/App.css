@@ -148,7 +148,8 @@ html, body, #root {
 .RaLayout-main {
   padding: 0 !important;
 }
-/* Animations globales pour le Dashboard */
+
+
 @keyframes fadeInUp {
   from {
     opacity: 0;

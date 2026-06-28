@@ -1,5 +1,3 @@
-// src/resources/sessions/SessionEdit.tsx
-
 import {
   Edit,
   SimpleForm,
@@ -39,7 +37,6 @@ export const SessionEdit = () => {
         >
           <SimpleForm className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Titre */}
               <div className="col-span-2">
                 <TextInput
                   source="title"
@@ -49,7 +46,6 @@ export const SessionEdit = () => {
                 />
               </div>
 
-              {/* Description */}
               <div className="col-span-2">
                 <TextInput
                   source="description"
@@ -60,7 +56,6 @@ export const SessionEdit = () => {
                 />
               </div>
 
-              {/* Horaires */}
               <div>
                 <DateTimeInput source="startTime" label="Début" fullWidth />
               </div>
@@ -68,14 +63,12 @@ export const SessionEdit = () => {
                 <DateTimeInput source="endTime" label="Fin" fullWidth />
               </div>
 
-              {/* Salle */}
               <div>
                 <ReferenceInput source="roomId" reference="rooms" fullWidth>
                   <SelectInput optionText="name" label="Salle" />
                 </ReferenceInput>
               </div>
 
-              {/* Capacité */}
               <div>
                 <NumberInput
                   source="capacity"
@@ -85,7 +78,6 @@ export const SessionEdit = () => {
                 />
               </div>
 
-              {/* Intervenants (multi-sélection) */}
               <div className="col-span-2">
                 <ReferenceArrayInput
                   source="speakerIds"

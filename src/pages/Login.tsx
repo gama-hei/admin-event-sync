@@ -27,16 +27,12 @@ export const LoginPage = () => {
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-[#0B0F19] p-4 md:p-8 selection:bg-cyan-500/30">
-      {/* Conteneur principal sombre à bords arrondis */}
       <div className="bg-[#111827] w-full max-w-4xl rounded-[24px] border border-slate-800 shadow-2xl shadow-cyan-950/10 p-3 flex flex-col md:flex-row gap-4 items-stretch min-h-[540px] overflow-hidden">
         
-        {/* Partie gauche – Aperçu analytique sombre (Fidèle à l'image) */}
         <div className="w-full md:w-1/2 bg-[#0d1527] rounded-[18px] flex flex-col justify-between p-8 relative overflow-hidden min-h-[320px] md:min-h-auto border border-slate-800/60">
-          {/* Halos de lumière néon cyan et violet */}
           <div className="absolute -top-20 -left-20 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl"></div>
           <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl"></div>
           
-          {/* Logo et Nom de l'application */}
           <div className="flex items-center gap-2.5 z-10">
             <img src={logo} alt="EventSync" className="h-8 w-auto text-cyan-400 brightness-0 invert" />
             <span className="text-xl font-extrabold tracking-tight text-white flex items-center gap-1.5">
@@ -44,7 +40,6 @@ export const LoginPage = () => {
             </span>
           </div>
 
-          {/* Centre : Image du Dashboard Analytique */}
           <div className="flex-1 flex items-center justify-center z-10 py-4 relative group">
             <div className="absolute inset-0 bg-gradient-to-t from-[#0d1527] via-transparent to-transparent z-20 pointer-events-none" />
             <img 
@@ -54,18 +49,15 @@ export const LoginPage = () => {
             />
           </div>
 
-          {/* Indicateur de statut en bas */}
           <div className="z-10 flex items-center gap-2 text-slate-400 text-xs font-medium bg-slate-900/40 backdrop-blur-md px-3 py-2 rounded-lg border border-slate-800/50 w-fit">
             <BarChart3 size={14} className="text-cyan-400" />
             <span>Suivi temps réel de vos KPIs</span>
           </div>
         </div>
 
-        {/* Partie droite – Formulaire Espace Sombre */}
         <div className="w-full md:w-1/2 flex flex-col justify-center p-4 md:p-8">
           <div className="max-w-sm w-full mx-auto">
             
-            {/* Titre et en-tête */}
             <div className="mb-8 text-center md:text-left">
               <h1 className="text-2xl md:text-3xl font-bold text-white tracking-tight">Welcome Back!</h1>
               <p className="text-xs text-slate-400 mt-2 font-medium">Saisissez vos identifiants pour accéder aux statistiques.</p>
@@ -73,7 +65,6 @@ export const LoginPage = () => {
 
             <form onSubmit={handleSubmit} className="space-y-4">
               
-              {/* Entrée Email */}
               <div className="relative">
                 <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
                   <Mail size={16} />
@@ -89,7 +80,6 @@ export const LoginPage = () => {
                 />
               </div>
 
-              {/* Entrée Mot de passe */}
               <div className="relative">
                 <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
                   <Lock size={16} />
@@ -112,7 +102,6 @@ export const LoginPage = () => {
                 </button>
               </div>
 
-              {/* Bouton de Soumission au style "Cyber-Cyan" */}
               <Button
                 type="submit"
                 disabled={loading}

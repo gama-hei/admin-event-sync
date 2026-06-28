@@ -1,5 +1,3 @@
-// src/resources/sessions/SessionList.tsx
-
 import {
   List,
   Datagrid,
@@ -16,7 +14,6 @@ import {
 } from 'react-admin';
 import { Card, CardContent } from '../../components/ui/card';
 
-// Barre d'actions personnalisée
 const ListActions = () => (
   <TopToolbar>
     <FilterButton />
@@ -24,7 +21,6 @@ const ListActions = () => (
   </TopToolbar>
 );
 
-// Filtres de recherche
 const SessionFilters = [
   <SearchInput source="title" placeholder="Rechercher par titre..." alwaysOn />,
 ];

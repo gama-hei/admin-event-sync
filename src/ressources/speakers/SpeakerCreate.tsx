@@ -1,5 +1,3 @@
-// src/resources/speakers/SpeakerCreate.tsx
-
 import {
   Create,
   SimpleForm,
@@ -35,7 +33,6 @@ export const SpeakerCreate = () => {
         >
           <SimpleForm className="space-y-6">
             <div className="grid grid-cols-1 gap-6">
-              {/* Nom complet */}
               <TextInput
                 source="fullName"
                 label="Nom complet"
@@ -43,7 +40,6 @@ export const SpeakerCreate = () => {
                 fullWidth
               />
 
-              {/* Photo de profil (URL) */}
               <TextInput
                 source="profilePicture"
                 label="URL de la photo de profil"

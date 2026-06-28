@@ -1,5 +1,3 @@
-// src/resources/sessions/SessionCreate.tsx
-
 import {
   Create,
   SimpleForm,
@@ -39,7 +37,6 @@ export const SessionCreate = () => {
         >
           <SimpleForm className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Événement parent */}
               <div className="col-span-2">
                 <ReferenceInput
                   source="eventId"
@@ -55,7 +52,6 @@ export const SessionCreate = () => {
                 </ReferenceInput>
               </div>
 
-              {/* Titre */}
               <div className="col-span-2">
                 <TextInput
                   source="title"
@@ -65,7 +61,6 @@ export const SessionCreate = () => {
                 />
               </div>
 
-              {/* Description */}
               <div className="col-span-2">
                 <TextInput
                   source="description"

@@ -6,7 +6,6 @@ import { SessionTrend } from './components/SessionTrend';
 import { RecentQuestions } from './components/RecentQuestions';
 import { Skeleton } from '../components/ui/skeleton';
 
-// Définition des types locaux (si les DTOs du backend ne sont pas importés)
 interface Event {
   id: string;
   title: string;
